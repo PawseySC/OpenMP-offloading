@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-11-12 15:54:58 +0800">
+    <meta http-equiv="last-modified" content="2024-04-30 07:26:19 +0800">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -57,7 +57,7 @@
           <a href="../" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Episodes <span class="caret"></span></a>
           <ul class="dropdown-menu">
             
-            <li><a href="../01-talks/index.html">Talks</a></li>
+            <li><a href="../01-talks/index.html">Lecture</a></li>
             
             <li><a href="../02-laplace-introduction/index.html">Introduction to Laplace Equation</a></li>
             
@@ -214,8 +214,8 @@
 <h3 id="functions">Functions</h3>
 <p>There are two functions defined in the code:</p>
 <ul>
-  <li>initialisation function <code class="highlighter-rouge">init()</code> which sets the initial and boundary condition,</li>
-  <li>main function <code class="highlighter-rouge">main(int argc, char *argv[])</code> which reads code input parameters, calls the initialisation function and implements the main algorithm.</li>
+  <li>initialisation function <code class="language-plaintext highlighter-rouge">init()</code> which sets the initial and boundary condition,</li>
+  <li>main function <code class="language-plaintext highlighter-rouge">main(int argc, char *argv[])</code> which reads code input parameters, calls the initialisation function and implements the main algorithm.</li>
 </ul>
 
 <h2 id="initialisation-function">Initialisation function</h2>
@@ -245,17 +245,17 @@
 
 <h2 id="main-functions">Main functions</h2>
 
-<p>The most important part of the main function is the implementation of Laplace equation solver. The algorithm iterations are implemented as a <code class="highlighter-rouge">while</code> loop. The <code class="highlighter-rouge">while</code> loop will terminate when one of the following conditions are satisfied:</p>
+<p>The most important part of the main function is the implementation of Laplace equation solver. The algorithm iterations are implemented as a <code class="language-plaintext highlighter-rouge">while</code> loop. The <code class="language-plaintext highlighter-rouge">while</code> loop will terminate when one of the following conditions are satisfied:</p>
 <ul>
-  <li>the number of iterations <code class="highlighter-rouge">iteration</code> exceeds the maximum number of iterations <code class="highlighter-rouge">max_iteration</code> defined by the user as a command line parameter,</li>
-  <li>the largest change in temperature <code class="highlighter-rouge">from the previous iteration </code><code class="highlighter-rouge">dt</code><code class="highlighter-rouge"> is lower than </code><code class="highlighter-rouge">MAX_TEMP_ERROR</code>`.</li>
+  <li>the number of iterations <code class="language-plaintext highlighter-rouge">iteration</code> exceeds the maximum number of iterations <code class="language-plaintext highlighter-rouge">max_iteration</code> defined by the user as a command line parameter,</li>
+  <li>the largest change in temperature <code class="language-plaintext highlighter-rouge">from the previous iteration </code><code class="language-plaintext highlighter-rouge">dt</code><code class="language-plaintext highlighter-rouge"> is lower than </code><code class="language-plaintext highlighter-rouge">MAX_TEMP_ERROR</code>`.</li>
 </ul>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// simulation iterations</span>
 <span class="k">while</span> <span class="p">(</span> <span class="n">dt</span> <span class="o">&gt;</span> <span class="n">MAX_TEMP_ERROR</span> <span class="o">&amp;&amp;</span> <span class="n">iteration</span> <span class="o">&lt;=</span> <span class="n">max_iterations</span> <span class="p">)</span> <span class="p">{</span>
 </code></pre></div></div>
 
-<p>Within the <code class="highlighter-rouge">while</code> loop the main computational kernel is implemented. The new temperature for every grid node is computed as an average over neighbours in the grid.</p>
+<p>Within the <code class="language-plaintext highlighter-rouge">while</code> loop the main computational kernel is implemented. The new temperature for every grid node is computed as an average over neighbours in the grid.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
     <span class="c1">// main computational kernel, average over neighbours in the grid</span>
@@ -264,7 +264,7 @@
             <span class="n">T_new</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">25</span> <span class="o">*</span> <span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span>
                                         <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
 </code></pre></div></div>
-<p>Next, the largest change in the temperature is computed and <code class="highlighter-rouge">dt</code> is updated. <code class="highlighter-rouge">T_new</code> is copied to <code class="highlighter-rouge">T</code> to allow for update in the next iteration. Diagnostic information is periodically printed (every 100 iterations) to monitor the convergence of the iterative algorithm.</p>
+<p>Next, the largest change in the temperature is computed and <code class="language-plaintext highlighter-rouge">dt</code> is updated. <code class="language-plaintext highlighter-rouge">T_new</code> is copied to <code class="language-plaintext highlighter-rouge">T</code> to allow for update in the next iteration. Diagnostic information is periodically printed (every 100 iterations) to monitor the convergence of the iterative algorithm.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// reset dt</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
@@ -335,7 +335,7 @@
   <div class="row">
     <div class="col-md-6" align="left">
       <h4>
-	Copyright &copy; 2016–2020
+	Copyright &copy; 2016–2024
 	<a href="http://pawsey.org.au">Pawsey Supercomputing Centre</a>
 
       </h4>

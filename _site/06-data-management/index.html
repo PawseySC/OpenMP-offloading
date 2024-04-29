@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-11-12 15:54:58 +0800">
+    <meta http-equiv="last-modified" content="2024-04-30 07:26:19 +0800">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -57,7 +57,7 @@
           <a href="../" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Episodes <span class="caret"></span></a>
           <ul class="dropdown-menu">
             
-            <li><a href="../01-talks/index.html">Talks</a></li>
+            <li><a href="../01-talks/index.html">Lecture</a></li>
             
             <li><a href="../02-laplace-introduction/index.html">Introduction to Laplace Equation</a></li>
             
@@ -162,7 +162,7 @@
       <strong>Questions</strong>
       <ul>
 	
-	<li><p>Usage of OpenACC and OpenMP data mapping directives</p>
+	<li><p>Usage of OpenMP data mapping directives</p>
 </li>
 	
       </ul>
@@ -179,10 +179,7 @@
 	<li><p>Perform basic profiling of GPU events</p>
 </li>
 	
-	<li><p>Apply data transfer OpenACC and OpenMP directives to improve the performance of the code</p>
-</li>
-	
-	<li><p>Understand differences between memory models</p>
+	<li><p>Apply data transfer OpenMP directives to improve the performance of the code</p>
 </li>
 	
       </ul>
@@ -195,7 +192,7 @@
 
 <blockquote class="callout">
   <h2 id="where-to-start">Where to start?</h2>
-  <p>This episode starts in <em>4_data/</em> directory. Decide if you want to work on OpenACC, OpenMP or both and follow the instructions below.</p>
+  <p>This episode starts in <em>4_data/</em> directory.</p>
 </blockquote>
 
 <p>Non-optimal memory management (e.g. excessive memory transfers) can heavily impact the performance of any GPU accelerated code. Therefore it is very important to understand how memory is being mapped and copied between host and device.</p>
@@ -235,7 +232,7 @@
 
 <p>As can be seen from the report generated below for the OpenMP version of the code, memory transfers represent more than 98% of the runtime (HtoD stands for Host to Device, DtoH stands from Device to Host).</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==228979== Profiling application: ./laplace_mp 4000
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==228979== Profiling application: ./laplace_mp 4000
 ==228979== Profiling result:
             Type  Time(%)      Time     Calls       Avg       Min       Max  Name
  GPU activities:   51.25%  60.3494s     11236  5.3711ms  1.1520us  9.4626ms  [CUDA memcpy HtoD]
@@ -295,7 +292,7 @@
 <p>Let’s run the <em>nvprof</em> profiling again on the OpenMP version.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash-4.2<span class="nv">$ </span>srun <span class="nt">-u</span> <span class="nt">-n</span> 1 nvprof ./laplace_mp 4000
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==301161== Profiling application: ./laplace_mp 4000
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>==301161== Profiling application: ./laplace_mp 4000
 ==301161== Profiling result:
             Type  Time(%)      Time     Calls       Avg       Min       Max  Name
  GPU activities:   80.95%  1.00671s      2247  448.03us  434.78us  458.08us  __omp_offloading_47c4f666_6901a48d_main_l56
@@ -348,7 +345,7 @@
     <li><p>We have successfully and significantly reduced the total number of memory transfers</p>
 </li>
     
-    <li><p>We have significantly increased the performance of both GPU implementations</p>
+    <li><p>We have significantly increased the performance of GPU implementation</p>
 </li>
     
   </ul>
@@ -383,7 +380,7 @@
   <div class="row">
     <div class="col-md-6" align="left">
       <h4>
-	Copyright &copy; 2016–2020
+	Copyright &copy; 2016–2024
 	<a href="http://pawsey.org.au">Pawsey Supercomputing Centre</a>
 
       </h4>
