@@ -3,20 +3,19 @@ title: "Data management"
 teaching: 15
 exercises: 15
 questions:
-- "Usage of OpenACC and OpenMP data mapping directives"
+- "Usage of OpenMP data mapping directives"
 objectives:
 - "Perform basic profiling of GPU events"
-- "Apply data transfer OpenACC and OpenMP directives to improve the performance of the code"
-- "Understand differences between memory models"
+- "Apply data transfer OpenMP directives to improve the performance of the code"
 keypoints:
 - "We have successfully and significantly reduced the total number of memory transfers"
-- "We have significantly increased the performance of both GPU implementations"
+- "We have significantly increased the performance of GPU implementation"
 ---
 
 # Data management
 
 > ## Where to start?
-> This episode starts in *4_data/* directory. Decide if you want to work on OpenACC, OpenMP or both and follow the instructions below.  
+> This episode starts in *4_data/* directory.  
 {: .callout}
 
 Non-optimal memory management (e.g. excessive memory transfers) can heavily impact the performance of any GPU accelerated code. Therefore it is very important to understand how memory is being mapped and copied between host and device.  
