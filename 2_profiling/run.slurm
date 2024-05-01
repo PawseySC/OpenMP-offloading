@@ -1,0 +1,30 @@
+#!/bin/bash --login 
+#SBATCH --reservation=CurtinHPCcourse
+#SBATCH --account=courses0100
+#SBATCH --tasks=1 
+#SBATCH --partition=work 
+#SBATCH --time=00:05:00 
+#SBATCH --export=NONE
+module purge
+module load craype-x86-milan
+module load PrgEnv-gnu/8.3.3
+# Compile
+echo "Compiling code"
+srun --export=all -u -n 1 make clean
+srun --export=all -u -n 1 make 
+# Run
+echo
+echo "Running C code"
+srun --export=all -u -n 1 ./laplace 4000
+# Generate profiling report for c
+echo
+echo "Generating profiling report for C"
+srun --export=all -u -n 1 gprof -lbp laplace gmon_c.out
+# Run
+echo
+echo "Running Fortran code"
+srun --export=all -u -n 1 ./laplacef 4000
+# Generate profiling report for fortran
+echo
+echo "Generating profiling report for Fortran"
+srun --export=all -u -n 1 gprof -lbp laplacef gmon_f.out
