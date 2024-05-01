@@ -1,0 +1,14 @@
+FC=/opt/rocm/llvm/bin/flang
+FFLAGS=-O3 -fopenmp -fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa -march=gfx90a
+LIBS=
+OBJ=laplace.o
+TARGET=laplacef
+
+%.o: %.f90
+	$(FC) $(FFLAGS) -c -o $@ $<
+
+$(TARGET): $(OBJ)
+	$(FC) $(FFLAGS) $(LIBS) -o $@ $^
+
+clean:
+	rm -f $(TARGET) *.o
