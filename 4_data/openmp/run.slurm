@@ -18,6 +18,6 @@ srun --export=all -u -n 1 make -f makefile.flang
 # Run
 echo
 echo "Running the c code"
-srun --export=all -u -n 1 rocprof --hsa-trace ./laplace 4000
+srun --export=all -u -n 1 rocprof --hsa-trace -o c_prof.csv ./laplace 4000
 echo "Running the Fortran code"
-srun --export=all -u -n 1 rocprof --hsa-trace ./laplacef 4000
+srun --export=all -u -n 1 rocprof --hsa-trace -o f_prof.csv ./laplacef 4000
