@@ -6,17 +6,17 @@ questions:
 - "Extra: implementing multi-GPU parallelisation"
 objectives:
 - "Use OpenMP to create mutliple CPU threads"
-- "Use OpenACC and OpenMP API functions to assign threads to devices"
+- "Use OpenMP API functions to assign threads to devices"
 - "Use update directives to synchronise halo-exchange boundaries"
 keypoints:
-- "We have learned how to parallelise OpenACC and OpenMP applications on multiple GPUs within the node"
+- "We have learned how to parallelise OpenMP applications on multiple GPUs within the node"
 - "We are now able to create codes that use all computational devices available in the node"
 ---
 
 # Mutli-GPU implementation
 
 > ## Where to start?
-> This episode starts in *5_single-gpu/* directory. Decide if you want to work on OpenACC, OpenMP or both and follow the instructions below.  
+> This episode starts in *5_single-gpu/* directory.   
 {: .callout}
 
 ## Strategies
@@ -40,11 +40,10 @@ We will start by creating OpenMP parallel region around the *while* loop. We wil
   ...
 }
 ```
-Now that we have created multiple threads, we will create affinity between threads and GPUs. For this we will use OpenMP and OpenACC API query functions.
+Now that we have created multiple threads, we will create affinity between threads and GPUs. For this we will use OpenMP API query functions.
 
 For this to work we must first include appropriate header files:
 ```c
-#include <openacc.h>
 #include <omp.h>
 ```
 
@@ -58,17 +57,12 @@ First, we will query for the number of available threads and set a thread ID.
 Next, we will query for the number of devices and compute the GPU device ID for each thread by taking thread ID module number of available GPU devices.
 
 ```c
-  num_devices = acc_get_num_devices(acc_device_nvidia);
-  device_id  = thread_id % num_devices;
-  acc_set_device_num(device_id, acc_device_nvidia);
+    num_devices = omp_get_num_devices();
+    device_id  = thread_id % num_devices;
+    omp_set_default_device(device_id);
 ```
 
-Finally, we can assign thread to GPU with the use of language specific function. Please note that this will look differently for OpenACC and OpenMP:
-* OpenACC
-```c
-acc_set_device_num(device_id, acc_device_nvidia);
-```
-* OpenMP
+Finally, we can assign thread to GPU with the use of language specific function. 
 ```c
 omp_set_default_device(device_id);
 ```
@@ -110,10 +104,6 @@ We can now change both i-loops to iterate within the precomputed boundaries:
 for(i = i_start; i <= i_end; i++)
 ```
 
-> ## Caution
-> There is one very important component missing: halo-exchange. Left-hand side and right-hand side boundaries of each stripe (chunk) need to be synchronised with other threads. Please continue reading to learn how that can be achieved with OpenACC and OpenMP.   
-{: .callout}
-
 ## Firstprivate variables
 
 We have set the CPU default OpenMP data type to *shared*. For this reason we need to be very careful with identifying variables that need to be treated as private of firstprivate within the OpenMP parallel region.
@@ -131,7 +121,7 @@ Therefore, the opening of the OpenMP parallel region should be of the following 
 
 ## Halo-exchange
 
-There is one very important component missing: halo-exchange. Left-hand side and right-hand side boundaries of each stripe (chunk) need to be synchronised with other threads. Please continue reading to learn how that can be achieved with OpenACC and OpenMP. This is related to the computational nature of the Laplace equation solver. Value for each grid node is computed as an average of its 4 neighbours.
+There is one very important component missing: halo-exchange. Left-hand side and right-hand side boundaries of each stripe (chunk) need to be synchronised with other threads. Please continue reading to learn how that can be achieved with OpenMP. This is related to the computational nature of the Laplace equation solver. Value for each grid node is computed as an average of its 4 neighbours.
 
 It is even more complicated since GPU threads are operating on a local copy of *T* and *T_new* arrays which were transferred to the GPU memory.
 
@@ -139,27 +129,14 @@ It is even more complicated since GPU threads are operating on a local copy of *
 > Do we need to transfer the whole *T* and *T_new* arrays back to CPU memory to achieve the synchronisation? We have already seen that copying whole arrays back and forth is a significant overhead.
 {: .callout}
 
-Fortunately, both OpenMP and OpenACC provide us with *update* directives which can be used to transfer only single rows or columns of 2D arrays. Therefore, each thread will:
+Fortunately, OpenMP provides us with *update* directive which can be used to transfer only single rows or columns of 2D arrays. Therefore, each thread will:
 * first copy its stripe (chunk) boundaries back to CPU memory,  
 * next copy neighbouring thread boundaries from CPU memory to GPU memory.
 We will place those two events right after the main computational kernel in the code.
 
 Please note that we had to introduce an additional OpenMP barrier between those two events. We need to be sure that boundaries of neighbouring threads are already available in the CPU memory.
 
-This can be implemented in the following way for OpenACC:
-```c
-// main computational kernel, average over neighbours in the grid
-#pragma acc kernels
-for(i = i_start; i <= i_end; i++)
-    for(j = 1; j <= GRIDY; j++)
-        T_new[i][j] = 0.25 * (T[i+1][j] + T[i-1][j] +
-                                    T[i][j+1] + T[i][j-1]);
-
-#pragma acc update self(T[i_start:1][1:GRIDY],T[i_end:1][1:GRIDY])
-#pragma omp barrier
-#pragma acc update device(T[(i_start-1):1][1:GRIDY],T[(i_end+1):1][1:GRIDY])
-```
-Similarly, for OpenMP:
+This can be implemented in the following way for OpenMP:
 ```c
 // main computational kernel, average over neighbours in the grid
 #pragma omp target
@@ -191,7 +168,7 @@ dt_global = 0.0;
 
 // compute the largest change and copy T_new to T
 /*
-OpenACC or OpenMP loop construct
+OpenMP loop construct
 */
 for(i = i_start; i <= i_end; i++){
     for(j = 1; j <= GRIDY; j++){
@@ -222,5 +199,5 @@ if((iteration % 100) == 0)
 ```
 
 > ## Note
-> The size of the grid should be significantly increased to measure scalability across multiple GPUs. We proposed to use 8192x8192 grid size.
+> The size of the grid should be significantly increased to measure scalability across multiple GPUs. We suggest to use 8192x8192 grid size.
 {: .callout}

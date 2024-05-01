@@ -4,7 +4,7 @@ teaching: 90
 exercises: 0
 questions:
 - "Overview of directives and GPU offloading model available in OpenMP"
-- "Overivew of compiler support for OpenACC and OpenMP offloading models"
+- "Overivew of compiler support for OpenMP offloading model"
 - "Introduction to training HPC platform"
 objectives:
 - "Understand key OpenMP constructs"
