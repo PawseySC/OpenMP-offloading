@@ -14,7 +14,7 @@ keypoints:
 # Serial implementation
 
 > ## Where to start?
-> This episode starts in *1_serial/* directory. Decide if you want to work on OpenACC, OpenMP or both and follow the instructions below.  
+> This episode starts in *1_serial/* directory.  
 {: .callout}
 
 ## Code structure

@@ -3,13 +3,11 @@ title: "Loop parallelisation"
 teaching: 15
 exercises: 15
 questions:
-- "Basic OpenACC and OpenMP directives to parallelise loop nests"
+- "Basic OpenMP directives to parallelise loop nests"
 objectives:
 - "Apply basic directives to parallelise loops"
-- "Understand differences between OpenACC and OpenMP approaches"
 keypoints:
-- "We have explored differences between OpenACC and OpenMP loop constructs for GPU parallelisation"
-- "We have an understanding of the difference between descriptive and prescriptive approach to GPU programming"
+- "We have explored OpenMP loop constructs for GPU parallelisation"
 ---
 
 # Loop parallelisation
