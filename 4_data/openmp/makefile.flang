@@ -1,5 +1,5 @@
 FC=/opt/rocm/llvm/bin/flang
-FFLAGS=-O3 -fopenmp -fopenmp-targets=amdgcn-amd-amdhsa -Xopenmp-target=amdgcn-amd-amdhsa -march=gfx90a
+FFLAGS=-O3 -fopenmp --offload-arch=gfx90a
 LIBS=
 OBJ=laplace.o
 TARGET=laplacef

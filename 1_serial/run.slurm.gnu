@@ -1,5 +1,5 @@
 #!/bin/bash --login 
-#SBATCH --reservation=CurtinHPCcourse
+#SBATCH --reservation=CurtinHPCcourse2025
 #SBATCH --account=courses0100
 #SBATCH --tasks=1 
 #SBATCH --partition=work 
